@@ -2,7 +2,7 @@
 
 # BMI Calculator App
 
-This is a flutter based simple BMI Calculator app which calculated Body Mass Index..
+This is a flutter based simple BMI Calculator app which calculated Body Mass Index and has been deployed on firebase.
 
 **LINK** https://bmicalc-d2f65.web.app/
 
