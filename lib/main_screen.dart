@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'container_box.dart';
@@ -26,21 +25,11 @@ class _MainScreenState extends State<MainScreen> {
 
   void updateBoxColor(int gender) {
     if (gender == 1) {
-      if (maleBoxColor == inActiveColor) {
-        maleBoxColor = activeColor;
-        femaleBoxColor = inActiveColor;
-      } else {
-        maleBoxColor = inActiveColor;
-        femaleBoxColor = activeColor;
-      }
+      maleBoxColor = activeColor;
+      femaleBoxColor = inActiveColor;
     } else {
-      if (femaleBoxColor == inActiveColor) {
-        femaleBoxColor = activeColor;
-        maleBoxColor = inActiveColor;
-      } else {
-        femaleBoxColor = inActiveColor;
-        maleBoxColor = activeColor;
-      }
+      femaleBoxColor = activeColor;
+      maleBoxColor = inActiveColor;
     }
   }
 
@@ -49,17 +38,15 @@ class _MainScreenState extends State<MainScreen> {
     return bmi.toStringAsFixed(1);
   }
 
-  /* String getInterpretation(double bmi) {
+  String getInterpretation(double bmi) {
     if (bmi >= 25.0) {
-      return 'You have higher than normal body weight. Try to excersie more.';
-    } 
-    else if (bmi > 18.5) {
+      return 'You have higher than normal body weight. Try to exercise more.';
+    } else if (bmi > 18.5) {
       return 'You have a normal body weight. Good Job!';
-    } 
-    else {
+    } else {
       return 'You have lower than normal body weight. You can eat a bit more.';
     }
-  } */
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
                   Slider(
                     value: height.toDouble(),
                     min: 120,
-                    max: 220,
+                    max: 320,
                     activeColor: activeColor,
                     inactiveColor: inActiveColor,
                     onChanged: (double newValue) {
@@ -197,7 +184,7 @@ class _MainScreenState extends State<MainScreen> {
                             },
                             backgroundColor: activeColor,
                             child: Icon(FontAwesomeIcons.minus,
-                                color: Colors.white),
+                                color: Color.fromARGB(255, 225, 142, 142)),
                           ),
                         ],
                       ),
@@ -207,49 +194,35 @@ class _MainScreenState extends State<MainScreen> {
               ),
               Expanded(
                 child: ContainerBox(
+                  
                   boxColor: inActiveColor,
                   childwidget: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    
                     children: <Widget>[
                       Text(
                         'AGE',
                         style: textStyle1,
                       ),
-                      Text(
-                        age.toString(),
-                        style: textStyle2,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          FloatingActionButton(
-                            onPressed: () {
-                              setState(() {
-                                if (age < 100) {
-                                  age++;
-                                }
-                              });
-                            },
-                            backgroundColor: activeColor,
-                            child: Icon(FontAwesomeIcons.plus,
-                                color: Colors.white),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your age',
+                             hintStyle: TextStyle(color: Colors.white),
+                            border: UnderlineInputBorder(),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
                           ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          FloatingActionButton(
-                            onPressed: () {
-                              setState(() {
-                                if (age > 0) {
-                                  age--;
-                                }
-                              });
-                            },
-                            backgroundColor: activeColor,
-                            child: Icon(FontAwesomeIcons.minus,
-                                color: Colors.white),
-                          ),
-                        ],
+                          style: TextStyle(color: Colors.white),
+                          onChanged: (value) {
+                            setState(() {
+                              age = int.tryParse(value) ?? age;
+                            });
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -257,6 +230,54 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ],
           )),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                result = calculateBmi(weight, height);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      backgroundColor: inActiveColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Container(
+                        color: inActiveColor,
+                        height: 200.0,
+                        margin: EdgeInsets.all(10.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Your BMI',
+                              style: textStyle1,
+                            ),
+                            Text(
+                              result,
+                              style: textStyle2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              });
+            },
+            child: Container(
+              child: Center(
+                child: Text(
+                  'Calculate',
+                  style: textStyle3,
+                ),
+              ),
+              width: double.infinity,
+              height: 80.0,
+              color: activeColor,
+              margin: EdgeInsets.only(top: 10.0),
+            ),
+          ),
           Expanded(
             child: ContainerBox(
               boxColor: inActiveColor,
@@ -264,7 +285,7 @@ class _MainScreenState extends State<MainScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    'Developed with ❤ by Swapnil Srivastava',
+                    'Developed with ❤ by COCO-DER-NEVO',
                     style: textStyle1,
                   ),
                   SizedBox(
@@ -276,7 +297,7 @@ class _MainScreenState extends State<MainScreen> {
                       FloatingActionButton(
                         elevation: 0,
                         onPressed: () {
-                          launch('https://swapnilsparsh.github.io');
+                          launch('https://nevos.vercel.app/');
                         },
                         backgroundColor: inActiveColor,
                         child: Icon(FontAwesomeIcons.portrait,
@@ -288,7 +309,7 @@ class _MainScreenState extends State<MainScreen> {
                       FloatingActionButton(
                         elevation: 0,
                         onPressed: () {
-                          launch('https://github.com/swapnilsparsh');
+                          launch('https://github.com/Neville777');
                         },
                         backgroundColor: inActiveColor,
                         child:
@@ -301,7 +322,7 @@ class _MainScreenState extends State<MainScreen> {
                         elevation: 0,
                         onPressed: () {
                           launch(
-                              'https://www.linkedin.com/in/swapnil-srivastava-sparsh/');
+                              'https://www.linkedin.com/in/neville-james-09a956184/');
                         },
                         backgroundColor: inActiveColor,
                         child: Icon(FontAwesomeIcons.linkedin,
@@ -313,7 +334,7 @@ class _MainScreenState extends State<MainScreen> {
                       FloatingActionButton(
                         elevation: 0,
                         onPressed: () {
-                          launch('https://twitter.com/swapnilsparsh');
+                          launch('https://x.com/NevoJemo');
                         },
                         backgroundColor: inActiveColor,
                         child: Icon(FontAwesomeIcons.twitterSquare,
@@ -325,56 +346,6 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          GestureDetector(
-              onTap: () {
-                setState(() {
-                  result = calculateBmi(weight, height);
-                  /*resultDetail = getInterpretation(bmi);*/
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext contest) {
-                        return Dialog(
-                            backgroundColor: inActiveColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Container(
-                              color: inActiveColor,
-                              height: 200.0,
-                              margin: EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    'Your BMI',
-                                    style: textStyle1,
-                                  ),
-                                  Text(
-                                    result.toString(),
-                                    style: textStyle2,
-                                  ),
-                                  /*Text(
-                                    resultDetail,
-                                    style: textStyle1,
-                                  ),*/
-                                ],
-                              ),
-                            ));
-                      });
-                });
-              },
-              child: Container(
-                child: Center(
-                  child: Text(
-                    'Calculate',
-                    style: textStyle3,
-                  ),
-                ),
-                width: double.infinity,
-                height: 80.0,
-                color: activeColor,
-                margin: EdgeInsets.only(top: 10.0),
-              ))
         ],
       ),
     );
